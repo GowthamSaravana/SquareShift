@@ -140,6 +140,14 @@ public class Squareshift {
         int[][] c=new int[r3][c3];
         int[][] d=new int[r4][c4];
         int m=0;
+        int sum=(r1*c1)+(r2*c2)+(r3*c3)+(r4*c4);
+        if(n>sum)
+        {
+            System.out.println("There number of passenger is larger than the available seats");
+        }
+        else
+        {
+        
         for(int i=0;i<4 ;i++) {
             //aisle seating
            
@@ -238,7 +246,7 @@ public class Squareshift {
             }
             System.out.println(" ");
         }
-        
+     }
                   
     }
     
