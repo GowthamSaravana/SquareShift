@@ -6,7 +6,10 @@
 package squareshift;
 import java.util.ArrayList;
 import java.util.Arrays;
+import static java.util.Collections.list;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -37,7 +40,7 @@ public class Squareshift {
     {
     if (n == 0||n==1||n==2) 
     return false; 
-    while (n != 1) 
+     while (n != 1) 
      { 
       if (n%2 != 0) 
          return false; 
@@ -47,7 +50,7 @@ public class Squareshift {
     }
     static ArrayList getpower(int[] arr,int n)
     {
-        ArrayList powerr=new ArrayList();
+        ArrayList<Integer> powerr=new ArrayList();
         int i;
         for(i=0;i<n;i++)
         {
@@ -61,7 +64,7 @@ public class Squareshift {
     }
     static ArrayList getprime(int[] arr,int n)
     {
-        ArrayList primee=new ArrayList();
+        ArrayList<Integer> primee=new ArrayList();
         int i;
         for(i=0;i<n;i++)
         {
@@ -75,7 +78,7 @@ public class Squareshift {
     }
     static ArrayList getneutral(int[] arr,ArrayList prime,ArrayList power,int n)
     {
-        ArrayList neutral=new ArrayList();
+        ArrayList<Integer> neutral=new ArrayList();
         int i;
         for(i=0;i<n;i++)
         {
@@ -91,17 +94,34 @@ public class Squareshift {
         return neutral;
     }
     public static void main(String[] args) {
-         int n,c1,r1,c2,r2,c3,r3,c4,r4;
+        int n;
         Scanner s =new Scanner(System.in);
-        int[][] arr=new int [4][2];
-        for(int i=0;i<4;i++)
+        //Input how many arrays we want to create via string
+        String rowcol;
+        System.out.println("Enter the row col values for the array:");
+        rowcol=s.nextLine();
+        int len=rowcol.length();
+        //System.out.print(len);
+        //If string is not of even length row col value cannot be extracted
+        if(len%2!=0)
         {
-            System.out.println("Enter the row and col values for 2d array "+(i+1));
-            for(int j=0;j<2;j++)
-            {
-                arr[i][j]=s.nextInt();
-            }
+            System.out.println("Invalid input");
         }
+        else
+        {
+        ArrayList<int[][]>list;
+        list = new ArrayList<>();
+        int first=0;
+        int second=1;
+        for (int i=0; i<(rowcol.length())/2; i++) {
+            
+            int[][] ia = new int[rowcol.charAt(first)-'0'][rowcol.charAt(second)-'0'];
+            list.add(ia);
+            first=second+1;
+            second=second+2;
+        }
+        
+        //Input the value of passenger ID
         System.out.println("Enter no of  passengers");
         n=s.nextInt();
         int[] pid1=new int[n];
@@ -111,143 +131,205 @@ public class Squareshift {
             pid1[i]=s.nextInt();
         }
         int[] pid=new int[n];
-        ArrayList primelist;
+        ArrayList<Integer> primelist;
         primelist = getprime(pid1,n);
-        //System.out.println("PrimeList"+primelist);
-        ArrayList power;
+        ArrayList<Integer> power;
         power=getpower(pid1,n);
-        //System.out.println("Power"+power);
-        ArrayList neutral;
+        ArrayList<Integer> neutral;
         neutral=getneutral(pid1,primelist,power,n);
-        //System.out.println("Neutral"+neutral);
         primelist.addAll(power);
         primelist.addAll(neutral);
 
         for(int i=0;i<primelist.size();i++)
         {
-            pid[i]=(int) primelist.get(i);
+            pid[i]=primelist.get(i);
         }
-        r1=arr[0][0]; 
-        c1=arr[0][1];
-        r2=arr[1][0];
-        c2=arr[1][1];
-        r3=arr[2][0];
-        c3=arr[2][1];
-        r4=arr[3][0];
-        c4=arr[3][1];
-        int[][] a=new int[r1][c1];
-        int[][] b=new int[r2][c2];
-        int[][] c=new int[r3][c3];
-        int[][] d=new int[r4][c4];
+        int row,col;
         int m=0;
-        int sum=(r1*c1)+(r2*c2)+(r3*c3)+(r4*c4);
-        if(n>sum)
+        int plen=pid.length;
+        //filling aisle seat
+        for(int i=0;i<list.size();i++)
         {
-            System.out.println("There number of passenger is larger than the available seats");
-        }
-        else
-        {
-        
-        for(int i=0;i<4 ;i++) {
-            //aisle seating
-           
-            if(i<r1 && m<pid.length) {
-                a[i][c1-1]=pid[m];
-                m++;
-                
+            int[][] a=list.get(i);
+            row=a.length;
+            col=a[0].length;
+            //first array has only one aisle column
+            if(i==0)
+            {
+                for(int r=0;r<row;r++)
+                {
+                  if(m<plen)
+                   {
+                     a[r][col-1]=pid[m];
+                     m++;
+                   }
+                }
             }
-            if(i<r2 && m<pid.length) {
-                
-                b[i][0]=pid[m];
+            //Last row has only one aisle column
+            else if(i==list.size()-1)
+            {
+                for(int r=0;r<row;r++){
+                 if(m<plen)
+                 {
+                    a[r][0]=pid[m];
                     m++;
-                   
-                    if(!(m<pid.length))
-                        break;
-                    
-                    b[i][c2-1]=pid[m];
-                    m++;
-                 
-            }
-            if(i<r3 && m<pid.length) {
-                  c[i][0]=pid[m];
-                    m++;
-                    if(!(m<pid.length))
-                        break;
-                    
-                   c[i][c3-1]=pid[m];
-                   
-                    m++;
-             }
-            if(i<r4 && m<pid.length){            
-                     d[i][0]=pid[m];
-                m++;
+                 }
+                }
             }
             
+            else
+            {
+            if(m<plen)
+            {
+                for(int r=0;r<row;r++){
+                    if(m<plen){
+                    a[r][0]=pid[m];
+                    m++;}
                     
+                    if(m<plen){
+                    a[r][col-1]=pid[m];
+                    m++;}
+                }
+            }
+            }
         }
-        //for window seat
-        for(int i=0;i<4;i++) {
-            if(i<r1 && m<pid.length){
-            a[i][0] = pid[m];
-            m++;
+        //filling window seat
+        int[][] a=list.get(0);
+        int arow=a.length;
+        for(int r=0;r<arow;r++ ) {
+            if (m<plen) {
+                a[r][0] = pid[m];
+                m++;
             }
-            if(i<r4 && m<pid.length) {
-            d[i][c4-1]=pid[m];
-            m++;
+        }
+        int[][] b=list.get(list.size()-1);
+        int bcol=b[0].length;
+        int brow=b.length;
+        for (int r=0;r<brow;r++) {
+            if (m<plen) {
+                b[r][bcol-1] = pid[m];
+                m++;
             }
+            }
+        
+        //filling rest of the center seats
+        for(int i=0;i<list.size();i++)
+        {
+            int[][] cen=list.get(i);
+            row=cen.length;
+            col=cen[0].length;
+            for(int r=0;r<row;r++)
+                    
+            {
+                for(int j=1;j<col-1;j++)
+                {
+                    if(m<plen){
+                    cen[i][j]=pid[m];
+                    m++;}
+                }
+            }
+            
         }
         
-        //for center seat
-        for(int i=0;i<4;i++) {
-            for(int j=1;j<c1-1 && m<pid.length ;j++) {
-                a[i][j]=pid[m];
-                m++;
+        
+        //int rv=0;
+        for(int v=0;v<list.size();v++)
+        {
+            
+            int[][] val=list.get(v);
+            int ar=val.length;
+            int ac=val[0].length;
+            System.out.println((v+1)+" Array");
+            for(int i=0;i<ar;i++)
+            {
+                for(int j=0;j<ac;j++)
+                {
+                System.out.print(val[i][j]+" ");
+                }
+                System.out.println();
             }
-            for(int j=1;j<c2-1 && m<pid.length;j++){
-                b[i][j]=pid[m];
-                m++;
-            }
-            for(int j=1;j<c3-1 && m<pid.length;j++){
-                c[i][j]=pid[m];
-                m++;
-            }
-            for(int j=1;j<c4-1 && m<pid.length;j++){
-                d[i][j]=pid[m];
-                m++;
-            }
+            System.out.println();
         }
-       
-        System.out.println(" First array");
-        for(int i=0;i<r1;i++){
-            for(int j=0;j<c1;j++){
-                System.out.print(a[i][j]+" ");
-                
-            }
-            System.out.println(" ");
+        
+	
         }
-        System.out.println("Second ");
-        for(int i=0;i<r2;i++){
-            for(int j=0;j<c2;j++){
-                System.out.print(b[i][j]+" ");
-            }
-            System.out.println(" ");
-        }
-        System.out.println(" Third");
-        for(int i=0;i<r3;i++){
-            for(int j=0;j<c3;j++){
-                System.out.print(c[i][j]+" ");
-            }
-            System.out.println(" ");
-        }
-        System.out.println("Fourth ");
-        for(int i=0;i<r4;i++){
-            for(int j=0;j<c4;j++){
-                System.out.print(d[i][j]+" ");
-            }
-            System.out.println(" ");
-        }
-     }
                   
     }
     
 }
+/*TESTCASE 1:
+Enter the row col values for the array:
+23343243
+Enter no of  passengers
+25
+Enter the passengers ID: 
+29 59 14 11 3 13 15 18 12 16 6 17 7 47 61 5 21 2 41 9 10 8 19 1 4
+
+1 Array  2 Array    3 Array  4 Array
+18 1 29  11 0 0 3    61 5     8 0 6
+12 0 59  13 0 0 17   2  41    4 0 21
+         7  0 0 47   19  16   14 0 9
+                              15 0 10
+
+TESTCASE 2:
+Enter the row col values for the array:
+2443
+Enter no of  passengers
+7
+Enter the passengers ID: 
+1 2 16 8 59 7 6
+
+1 Array      2 Array
+6 0 0 2      7 0 0   
+0 0 0 59     16 0 0
+             8  0 0
+             1  0 0   
+TESTCASE 3:
+Enter the row col values for the array:
+32234
+Invalid Input.
+
+TESTCASE 4:
+Enter the row col values for the array:
+522113
+Enter no of  passengers
+10
+Enter the passengers ID: 
+9 5 3 4 87 47 11 15 25 29
+
+1 Array    2 Array  3 Array
+0 5        9        25 0 0
+0 3        15
+0 47 
+0 11 
+0 29 
+
+TESTCASE 5:
+Enter the row col values for the array:
+342322
+Enter no of  passengers
+15
+Enter the passengers ID: 
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+
+1 Array    2 Array  3 Array
+6 15 0 2   7 0 11   8 12
+9 0 0 3    13 0 4   1 14
+10 0 0 5 
+
+
+TESTCASE 6:
+Enter the row col values for the array:
+233243342244
+Enter no of  passengers
+20
+Enter the passengers ID: 
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+
+1 Array  2 Array  3 Array   4 Array        5 Array  6 Array
+0 0 2    5 7      4  0  8   14  0  0  15    0  0     0  0  0  0
+0 0 3    11 13    16 0  1   18  0  0  20    0  0     0  0  0  0
+         17 19    6  0  9   0   0  0   0             0  0  0  0
+                  10 0  12                           0  0  0  0
+
+*/
