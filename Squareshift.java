@@ -6,10 +6,7 @@
 package squareshift;
 import java.util.ArrayList;
 import java.util.Arrays;
-import static java.util.Collections.list;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  *
