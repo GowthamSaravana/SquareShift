@@ -94,29 +94,26 @@ public class Squareshift {
         int n;
         Scanner s =new Scanner(System.in);
         //Input how many arrays we want to create via string
-        String rowcol;
-        System.out.println("Enter the row col values for the array:");
-        rowcol=s.nextLine();
-        int len=rowcol.length();
-        //System.out.print(len);
-        //If string is not of even length row col value cannot be extracted
-        if(len%2!=0)
+        int roww;
+        System.out.println("Enter the row values:");
+        roww=s.nextInt();
+        System.out.println("Enter the array values");
+        
+        int[][] rowcol=new int[roww][2];
+        for(int i=0;i<roww;i++)
         {
-            System.out.println("Invalid input");
+            for(int j=0;j<2;j++)
+            {
+                rowcol[i][j]=s.nextInt();
+            }
         }
-        else
-        {
         ArrayList<int[][]>list;
         list = new ArrayList<>();
-        int first=0;
-        int second=1;
-        for (int i=0; i<(rowcol.length())/2; i++) {
+        for (int i=0; i<roww; i++) {
             
-            int[][] ia = new int[rowcol.charAt(first)-'0'][rowcol.charAt(second)-'0'];
+            int[][] ia = new int[rowcol[i][0]][rowcol[i][1]];
             list.add(ia);
-            first=second+1;
-            second=second+2;
-        }
+         }
         
         //Input the value of passenger ID
         System.out.println("Enter no of  passengers");
@@ -162,7 +159,7 @@ public class Squareshift {
                    }
                 }
             }
-            //Last array has only one aisle column
+            //Last row has only one aisle column
             else if(i==list.size()-1)
             {
                 for(int r=0;r<row;r++){
@@ -249,14 +246,19 @@ public class Squareshift {
         }
         
 	
-        }
+        
                   
     }
     
 }
 /*TESTCASE 1:
-Enter the row col values for the array:
-23343243
+Enter the row values:
+4
+Enter the array values:
+2 3
+3 4
+3 2
+4 3
 Enter no of  passengers
 25
 Enter the passengers ID: 
@@ -269,8 +271,11 @@ Enter the passengers ID:
                               15 0 10
 
 TESTCASE 2:
-Enter the row col values for the array:
-2443
+Enter the row values:
+2
+Enter the array values:
+2 4
+4 3
 Enter no of  passengers
 7
 Enter the passengers ID: 
@@ -281,12 +286,15 @@ Enter the passengers ID:
 0 0 0 59     16 0 0
              8  0 0
              1  0 0   
-TESTCASE 3:
-Enter the row col values for the array:
-32234
-Invalid Input.
 
-TESTCASE 4:
+
+TESTCASE 3:
+Enter the row values:
+3
+Enter the array values:
+5 2
+2 1
+1 3
 Enter the row col values for the array:
 522113
 Enter no of  passengers
@@ -301,9 +309,13 @@ Enter the passengers ID:
 0 11 
 0 29 
 
-TESTCASE 5:
-Enter the row col values for the array:
-342322
+TESTCASE 4:
+Enter the row values:
+3
+Enter the array values:
+3 4
+2 3
+2 2
 Enter no of  passengers
 15
 Enter the passengers ID: 
@@ -315,9 +327,16 @@ Enter the passengers ID:
 10 0 0 5 
 
 
-TESTCASE 6:
-Enter the row col values for the array:
-233243342244
+TESTCASE 5:
+Enter the row values:
+6
+Enter the array values:
+2 3
+3 2
+4 3
+3 4
+2 2
+4 4
 Enter no of  passengers
 20
 Enter the passengers ID: 
