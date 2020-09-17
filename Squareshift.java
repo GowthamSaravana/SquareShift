@@ -162,7 +162,7 @@ public class Squareshift {
                    }
                 }
             }
-            //Last row has only one aisle column
+            //Last array has only one aisle column
             else if(i==list.size()-1)
             {
                 for(int r=0;r<row;r++){
